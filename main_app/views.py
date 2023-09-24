@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -6,16 +5,22 @@ from .models import Ads
 from .serializers import AdsSerializer
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def ads_list_api_view(request):
-    """  Получить List of objects = QuerySet """
-    ads_list = Ads.objects.all()
+    if request.method == 'GET':
+        """  Получить List of objects = QuerySet """
+        ads_list = Ads.objects.all()
 
-    """  Reformat (Serialize) list of object to JSONE """
-    ads_jsone = AdsSerializer(instance=ads_list, many=True).data
+        """  Reformat (Serialize) list of object to JSONE """
+        ads_jsone = AdsSerializer(instance=ads_list, many=True).data
 
-    """  Return list of objects """
-    return Response(data=ads_jsone)
+        """  Return list of objects """
+        return Response(data=ads_jsone)
+    elif request.method == 'POST':
+        print(request.data)
+        print(request.data.get('text'))
+        print(request.data.get('int'))
+        return Response()
 
 
 
